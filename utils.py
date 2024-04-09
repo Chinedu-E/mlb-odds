@@ -62,7 +62,6 @@ class MainCategory:
             return subcategory.get_subcategory_odds()
 
         if multithread:
-            print("Using multithreading for all subcategories")
             with ThreadPoolExecutor() as executor:
                 # Submit tasks for each subcategory
                 futures = [executor.submit(gather_odds_for_subcategory, category) for category in self.subcategories]
@@ -74,6 +73,7 @@ class MainCategory:
         else:
             tables = [gather_odds_for_subcategory(category) for category in self.subcategories]
         category_table = pd.concat(tables)
+        category_table.reset_index(drop=True, inplace=True)
         self.df = category_table
         return category_table
 
@@ -87,7 +87,9 @@ class MainCategory:
         Returns:
         - pd.DataFrame: A DataFrame containing the concatenated data from both MainCategory objects.
         """
-        return pd.concat([self.df, other.df])
+        df = pd.concat([self.df, other.df])
+        df.reset_index(drop=True, inplace=True)
+        return df
 
 
 class SubCategory:
@@ -148,7 +150,11 @@ class SubCategory:
         """
         all_events = self.get_all_events()
         if len(all_events) == 0:
+            print(f"No events found for the {self.sub_category} subcategory")
             return pd.DataFrame()
+        
+        print(f"Processing events for {self.sub_category}")
+
         tables = []
         for event in all_events:
             table = self.get_match_table(event)
@@ -165,6 +171,8 @@ class SubCategory:
         df["sub_category_type"] = self.sub_category.replace("-", "_")
         df["time_now_local"] = self.time_local
         df["time_now_utc"] = self.time_utc
+
+        print(f"Done processing events for {self.sub_category}")
         return df
 
     def get_page_soup(self) -> BeautifulSoup:
