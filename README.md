@@ -25,13 +25,13 @@ will be returned as a pandas dataframe
 1. Clone the project
 
 ```bash
-   git clone https://github.com/your-username/mlb-odds-scraping.git
+   git clone https://github.com/Chinedu-E/mlb-odds.git
 ```
 
 2. Go to the project directory
 
 ```bash
-  cd mlb-odds-scraping
+  cd mlb-odds
 ```
 
 3. Install dependencies (ideally in a virtual env)
@@ -67,6 +67,6 @@ You can also adjust how often you want to gather the odds. The default is 20 min
 ```
 
 ## Additional Information
-- If there no events for a given subcategory, the program simply skips that subcategory. This is important to note because depending on when the program is run, some subcategories might be absent.
+- If there no events for a given subcategory, the program simply skips that subcategory. This is important to note because some subcategories might be absent depending on when the program is run.
 
 - There also exists a chance that the time at which the program is run coincides with when DraftKings would be updating the odds on their end. This would result in an empty DataFrame.
