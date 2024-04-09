@@ -159,7 +159,6 @@ class SubCategory:
         df["sub_category_type"] = self.sub_category.replace("-", "_")
         df["time_now_local"] = self.time_local
         df["time_now_utc"] = self.time_utc
-        df["odds_type"] = "American"
         return df
 
     def get_page_soup(self) -> BeautifulSoup:
@@ -192,28 +191,26 @@ class SubCategory:
         rows = match_soup.find('table').find_all('tr')[1:] # Exclude table header
         players = []
         over_under_totals = []
-        overs = []
-        unders = []
+        odds = []
+        odds_types = []
         for row in rows:
             player_name_uncleaned = row.find('th').get_text()
             player_name = player_name_uncleaned.split("New")[0]
             row_data = row.find_all('td')
             over_uncleaned = unicodedata.normalize("NFKC", row_data[0].get_text())
             under_uncleaned = unicodedata.normalize("NFKC", row_data[1].get_text())
-            over_under_total, over = clean_odds(over_uncleaned)
-            _, under = clean_odds(under_uncleaned)
-
-
+            over_under_total1, over = clean_odds(over_uncleaned)
+            over_under_total2, under = clean_odds(under_uncleaned)
             
-            players.append(player_name)
-            over_under_totals.append(over_under_total)
-            overs.append(over)
-            unders.append(under)
+            players += [player_name, player_name]
+            odds_types += ['Over', 'Under']
+            over_under_totals += [over_under_total1, over_under_total2]
+            odds += [over, under]
         data = {
                 'player_name': players,
                 'over_under_total': over_under_totals,
-                'odds_over': overs,
-                'odds_under': unders
+                'odds': odds,
+                "odd_type": odds_types,
             }
         return pd.DataFrame(data)
 
