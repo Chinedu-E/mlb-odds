@@ -147,6 +147,8 @@ class SubCategory:
         - pd.DataFrame: A DataFrame containing the gathered odds data.
         """
         all_events = self.get_all_events()
+        if len(all_events) == 0:
+            return pd.DataFrame()
         tables = []
         for event in all_events:
             table = self.get_match_table(event)
