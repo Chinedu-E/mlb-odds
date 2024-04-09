@@ -31,12 +31,14 @@ def initialize_driver():
 def get_odds(multithread: bool):
     batter_props = MainCategory('batter-props', categories['batter-props'])
     pitcher_props = MainCategory('pitcher-props', categories['pitcher-props'])
-    print("Gathering data for the main category: batter props...", end="")
+
+    print("Gathering data for the main category: batter props...")
     batter_props.gather_odds(initialize_driver, multithread)
-    print("Done", end="\n")
-    print("Gathering data for the main category: pitcher props...", end="" )
+    print("Done with batter props")
+    
+    print("Gathering data for the main category: pitcher props..." )
     pitcher_props.gather_odds(initialize_driver, multithread)
-    print("Done", end="\n")
+    print("Done with pitcher props")
 
     df = batter_props + pitcher_props
     print(df)
@@ -49,11 +51,8 @@ def main(args):
     get_odds(args.multithread) # Run in it once on program startup
     schedule.every(args.gather_freq).minutes.do(get_odds, args.multithread)
 
-    # Main loop to run the scheduled tasks
     while True:
-        # Run pending scheduled tasks
         schedule.run_pending()
-        # Wait for 1 minute before checking again
         time.sleep(60)
 
 
