@@ -29,11 +29,15 @@ class EventInfo:
         """
         Split the game time into local and UTC times, and set the game date.
         """
-        _, time_str = self.game_time.split(' ')
+        day, time_str = self.game_time.split(' ')
         time_obj = datetime.datetime.strptime(time_str, '%I:%M%p')
         self.game_time_local = time_obj.strftime("%H:%M")
         self.game_time_utc = time_obj.astimezone(datetime.timezone.utc).strftime("%H:%M")
-        self.game_date = datetime.datetime.now().strftime('%Y-%m-%d')
+        if day == 'Tomorrow':
+            self.game_date = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+        else:
+            self.game_date = datetime.datetime.now().strftime('%Y-%m-%d')
+        
 
 
 class MainCategory:
