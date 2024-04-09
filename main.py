@@ -31,19 +31,23 @@ def initialize_driver():
 def get_odds(multithread: bool):
     batter_props = MainCategory('batter-props', categories['batter-props'])
     pitcher_props = MainCategory('pitcher-props', categories['pitcher-props'])
-    print("Gathering data for main category: batter props")
+    print("Gathering data for the main category: batter props...", end="")
     batter_props.gather_odds(initialize_driver, multithread)
-    print("Gathering data for main category: pitcher props" )
+    print("Done", end="\n")
+    print("Gathering data for the main category: pitcher props...", end="" )
     pitcher_props.gather_odds(initialize_driver, multithread)
+    print("Done", end="\n")
 
     df = batter_props + pitcher_props
     print(df)
+    if args.save_to_csv:
+        df.to_csv("odds.csv", index=False)
+        print("CSV file saved to current directory; odds.csv")
 
 
 def main(args):
     get_odds(args.multithread) # Run in it once on program startup
-
-    schedule.every(20).minutes.do(get_odds, args.multithread)
+    schedule.every(args.gather_freq).minutes.do(get_odds, args.multithread)
 
     # Main loop to run the scheduled tasks
     while True:
@@ -58,5 +62,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', '--multithread', action='store_false', help='Enable multithreading')
+    parser.add_argument('-s', '--save-to-csv', action='store_true', help='Store the table to a csv file')
+    parser.add_argument('--gather-freq', type=int, default=20, help='The frequency in minutes to gather odds')
     args = parser.parse_args()
     main(args)
