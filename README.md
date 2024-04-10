@@ -47,7 +47,7 @@ will be returned as a pandas dataframe
 
 ```
 
-By default, the program uses multithreading to gather odds from all subcategories. To turn this off, simply add a flag
+By default, the program uses multithreading to gather odds from all subcategories. **To turn this off**, simply add the `-m`  flag
 
 ```bash
   python main.py -m
