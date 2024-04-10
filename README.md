@@ -33,37 +33,39 @@ will be returned as a pandas dataframe
 ```bash
   cd mlb-odds
 ```
+3. Create virtual environment and activate (assumes a windows machine)
+   
+```bash
+  python -m venv venv
+  venv\scripts\activate
+```
 
-3. Install dependencies (ideally in a virtual env)
+4. Install dependencies
 
 ```bash
   pip install -r requirements.txt
 ```
 
-4. Execute the main script to start scraping MLB odds data every 20 minutes:
+5. Execute the main script to start scraping MLB odds data every 20 minutes:
 
 ```bash
   python main.py
-
 ```
 
 By default, the program uses multithreading to gather odds from all subcategories. **To turn this off**, simply add the `-m`  flag
 
 ```bash
   python main.py -m
-
 ```
 
 You can also adjust how often you want to gather the odds. The default is 20 minutes. For example if we want every 5 minutes:
 
 ```bash
   python main.py --gather-freq 5
-
 ```
  You can save the odds to a csv in the current directory for better inspection using the `-s` flag 
  ```bash
   python main.py -s
-
 ```
 
 ## Additional Information
